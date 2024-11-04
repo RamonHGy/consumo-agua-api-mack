@@ -1,0 +1,4 @@
+1 - registrar consumo de agua(permitindo que os usuarios registrem o cosumo de agua mensal. Cada regsitgro incluira o identificador do usuario, a quantidade de agua consumida (em metros cubicos) e a data da leitura)
+2 - consultar historico de consumo(permitindo que os usuarios visualizem seu historico de consumo de agua em um periodo especificado o historico incluira todos os registro de consumo entre as datas inciais e final fornecidas)
+3 - alertas de consumo elevados
+gerar alertas para o usuario que ultrapassarem o consumo do mes atual em relacao ao ultimo mes cadastradp, é necessario ter pelo menos dois meses cadastrados para comparação
