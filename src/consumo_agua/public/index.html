@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <nav class="links">
+        <a href="#" id="linkCadastro">Cadastro de usuário</a>
+        <a href="#" id="linkConsulta">Consultar consumo</a>
+        <a href="#" id="linkAlerta">Alerta</a>
+    </nav>
+
+    <!-- Formulário de Cadastro de Consumo -->
+    <div id="formCadastro" class="form">
+        <h1>Registrar Consumo</h1>
+        <form id="formCadastrar">
+            <!-- Corrigido para combinar com o id do input -->
+            <label for="id-user">Código do Usuário:
+                <input type="number" id="id-user" placeholder="Código do usuário" required>
+            </label>
+            <label for="water-consum">Consumo (m³):
+                <input type="number" id="water-consum" placeholder="Consumo (m³)" required>
+            </label>
+            <label for="date-consum">Data do Consumo:
+                <input type="date" id="date-consum" required>
+            </label>
+            <button id="button-post" type="submit">Registrar</button>
+
+            <p id="response"></p>
+        </form>
+    </div>
+    
+    <br>
+    
+    <!-- Formulário de Consulta de Consumo -->
+    <div id="formConsumption" class="form2">
+        <h1>Consultar Consumo</h1>
+        <form id="formConsult">
+            <!-- Corrigido para combinar com o id do input -->
+            <label for="id-user-consum1">Código do Usuário:
+                <input type="number" id="id-user-consum" placeholder="Código do usuário" required>
+            </label>
+            <label for="start-date1">Data Inicial:
+                <input type="date" id="start-date" required>
+            </label>
+            <label for="end-date1">Data Final:
+                <input type="date" id="end-date" required>
+            </label>
+    
+            <button id="button-get" type="submit">Consultar</button>
+
+            <p id="response-consum"></p>
+        </form>
+    </div>
+    
+    <div id="formAlerta" class="form">
+        <h1>Alerta de consumo</h1>
+        <form>
+            <label for="alerts">
+                <input type="text" placeholder="Código do usuário">
+            </label>
+            <button type="button">Buscar</button>
+        </form>
+    </div>
+
+    <section id="results">
+    </section>
+    
+    <script src="main.js"></script>
+</body>
+</html>

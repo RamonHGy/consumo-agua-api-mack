@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Consumption, ConsumptionDT } from './consumo_agua.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { startOfMonth, endOfMonth, subMonths } from 'date-fns';
 
 @Injectable()
 export class ConsumoAguaService {
@@ -12,7 +11,7 @@ export class ConsumoAguaService {
         const consumptionModel = new this.consumptionModel({
             userId: consumption.userId,
             consumption: consumption.consumption,
-            date: consumption.date,
+            date: new Date(consumption.date),
         });
         const result = await consumptionModel.save();
         return result;
@@ -27,23 +26,26 @@ export class ConsumoAguaService {
     }
     
     async getHistory(userId: number, startDate: Date, endDate: Date): Promise<ConsumptionDT[]> {
-        return await this.consumptionModel.find({
-            userId,
-            date: { $gte: startDate, $lte: endDate }
-        }).lean(); 
-    }
+        const result = await this.consumptionModel.find({
+          userId,
+          date: { $gte: startDate, $lte: endDate }
+        }).lean();
+      
+        console.log("Resultado da consulta:", result); 
+        return result; 
+      }
+      
 
     async getAlertas(userId: number) {
         const consumos = await this.consumptionModel.find({ userId }).sort({ date: -1 }).exec();
     
-        // Verifique se há pelo menos 2 meses de dados
+        
         if (consumos.length < 2) {
             return { message: 'Não há dados suficientes para comparação.' };
         }
     
-        // Extraia os consumos dos últimos dois meses
-        const mesAtual = consumos[0]; // Último mês (data mais recente)
-        const mesAnterior = consumos[1]; // Penúltimo mês
+        const mesAtual = consumos[0]; 
+        const mesAnterior = consumos[1]; 
     
         if (mesAtual.consumption > mesAnterior.consumption) {
             return {
@@ -55,6 +57,4 @@ export class ConsumoAguaService {
             };
         }
     }
-    
-    
 }

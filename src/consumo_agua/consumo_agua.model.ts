@@ -9,7 +9,7 @@ export class Consumption extends Document {
   @Prop({ required: true })
   consumption: number;
 
-  @Prop({ required: true })
+  @Prop({type: Date, required: true })
   date: Date;
 }
 

@@ -9,12 +9,15 @@ export class ConsumoAguaController {
   @Post()
   async registerConsumption(@Body() consumption: ConsumptionDT): Promise<any> {
     try {
+      console.log('Recebendo dados: ', consumption)
       const resultado = await this.consumoService.register(consumption);
+      console.log('Resultado da gravação:', resultado);
       return { 
         Message: 'Consumo registrado!',
         Consumption: resultado,
       };
     } catch (error) {
+      console.error('Erro ao registrar consumo:', error)
       throw new HttpException('Erro ao registrar consumo', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
