@@ -30,9 +30,8 @@ export class ConsumoAguaController {
   ): Promise<any> {
     try {
       const resultado = await this.consumoService.getHistory(userId, new Date(startDate), new Date(endDate));
-      
-      // Removendo o formato da data
-      return { resultado }; // Retorna o resultado original
+    
+      return { resultado }; 
     } catch (error) {
       throw new HttpException('Erro ao obter histórico', HttpStatus.INTERNAL_SERVER_ERROR);
     }

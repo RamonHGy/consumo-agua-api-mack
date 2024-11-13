@@ -88,16 +88,16 @@ function consumptionHistory(data){
 }
 
 
-function showUser(user){
-    var artc = "<article>";
+// function showUser(user){
+//     var artc = "<article>";
 
-    artc += "<h1>" + user.userId + "</h1>";
-    artc += "<p>" + "Consumo: " + user.consumption + "</p>"
-    artc += "<p>" + "Data: " + new Date(user.date).toLocaleDateString() + "</p>"
-    artc += "</article>";  
+//     artc += "<h1>" + user.userId + "</h1>";
+//     artc += "<p>" + "Consumo: " + user.consumption + "</p>"
+//     artc += "<p>" + "Data: " + new Date(user.date).toLocaleDateString() + "</p>"
+//     artc += "</article>";  
 
-    return artc;
-}
+//     return artc;
+// }
 
 function clear() {
     document.getElementById('id-user').value = "";
