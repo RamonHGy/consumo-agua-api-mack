@@ -20,8 +20,9 @@ function callAPI(url, method, callback, data) {
         .catch(error => console.error('Error:', error));
 }
 
-document.querySelector("#formCadastrar").addEventListener("submit", registerConsumption)
-document.querySelector("#formConsult").addEventListener("submit", consultConsumption)
+document.querySelector("#formRegister").addEventListener("submit", registerConsumption);
+document.querySelector("#formConsult").addEventListener("submit", consultConsumption);
+document.querySelector("#formAlert").addEventListener("submit", alertConsumption );
 
 
 async function registerConsumption(event) {
@@ -36,12 +37,18 @@ async function registerConsumption(event) {
 
     callAPI(url, "POST", function(status, response){
         console.log('Resposta da API:', response);
+        const responseElement = document.getElementById('response')
         if(status === 200 || status === 201){
             console.log("Dados enviados", user)
-            document.getElementById('response').innerHTML = "Registrado com sucesso";
-            clear()
+            responseElement.innerHTML = "Registrado com sucesso";
+            responseElement.style.display = "block"
+            clear();
+
+            setTimeout(() => {
+                responseElement.style.display = "none";
+            }, 3000);
         }else{
-            alert('Ocorreu um erro: ' + status)
+            alert('Ocorreu um erro: ' + status);
         }
     }, user);
 }
@@ -61,6 +68,7 @@ async function consultConsumption(event){
             console.log("Dados recebidos: ", response);
             consumptionHistory(response);
             clear();
+
         }else{
             console.error("Erro ao buscar dados", status);
         }
@@ -71,33 +79,59 @@ function consumptionHistory(data){
     const responseElement = document.getElementById('response-consum');
     responseElement.innerHTML = '';
 
-    if (data && data.length >= 2){
+    if (data && data.length){
         data.forEach(element => {
             const createDiv = document.createElement('div');
-            createDiv.innerHTML = `
+            createDiv.innerHTML = `<article>
+            <p>Código do suário: ${element.userId}</p>
             <p>Data: ${new Date(element.date).toLocaleDateString()}</p>
             <p>Consumo: ${element.consumption} (m³)</p>
-            <hr>`;
+            <hr></article>`;
             responseElement.appendChild(createDiv);
+            responseElement.style.display = "flex"
+            setTimeout(() => {
+                responseElement.style.display = "none";
+            }, 20000);
         });
-    }else if(data && data.length < 2){
-        responseElement.innerHTML = '<p>Consumos insuficiente</p>';
-    }else{
+        
+        }else{
         responseElement.innerHTML = '<p>Nenhum consumo encontrado no intervalo</p>';
+        responseElement.style.display = "block"; 
+        setTimeout(() => { 
+            responseElement.style.display = "none"; 
+        }, 4000);
     }
 }
 
+async function alertConsumption(event) {
+    event.preventDefault();
+    const userId = document.getElementById('id-user-alert').value;
+    console.log(event);
+    const url = (`${URL_BASE}/consumo-agua/alert/${userId}`);
 
-// function showUser(user){
-//     var artc = "<article>";
+    callAPI(url, "GET", function(status, response){
+        if(status === 200 || status === 201){
+            console.log(response);
+            showAlert(response)
+            clear()
+        }else{
+            console.error("Erro ao buscar", status)
+        }
+    });
+}
 
-//     artc += "<h1>" + user.userId + "</h1>";
-//     artc += "<p>" + "Consumo: " + user.consumption + "</p>"
-//     artc += "<p>" + "Data: " + new Date(user.date).toLocaleDateString() + "</p>"
-//     artc += "</article>";  
+function showAlert(user){
+    const alertMessage = document.getElementById('alert-message-consum');
+    alertMessage.innerHTML = '';
 
-//     return artc;
-// }
+    if(user.alerts.message){
+        alertMessage.style.display = 'block'
+        alertMessage.innerHTML = `<p>${user.alerts.message}</p>`
+    }else{
+        alertMessage.style.display = 'block'
+        alertMessage.innerHTML = `<p>Consumo dentro dos limites</p>`
+    }
+}
 
 function clear() {
     document.getElementById('id-user').value = "";
@@ -106,4 +140,44 @@ function clear() {
     document.getElementById('start-date').value = "";
     document.getElementById('end-date').value = "";
     document.getElementById('id-user-consum').value = "";
+    document.getElementById('id-user-alert').value = ""
 }
+
+// Seleciona os elementos de formulário
+const formCadastro = document.getElementById('formCadastro');
+const formConsumption = document.getElementById('formConsumption');
+const formAlerta = document.getElementById('formAlerta');
+
+// Seleciona os links do menu
+const linkRegister = document.getElementById('linkRegister');
+const linkConsult = document.getElementById('linkConsult');
+const linkAlert = document.getElementById('linkAlert');
+
+// Função para mostrar o formulário de cadastro e esconder os outros
+linkRegister.addEventListener('click', () => {
+    formCadastro.style.display = 'block';
+    formConsumption.style.display = 'none';
+    formAlerta.style.display = 'none';
+});
+
+// Função para mostrar o formulário de consulta e esconder os outros
+linkConsult.addEventListener('click', () => {
+    formCadastro.style.display = 'none';
+    formConsumption.style.display = 'block';
+    formAlerta.style.display = 'none';
+});
+
+// Função para mostrar o formulário de alerta e esconder os outros
+linkAlert.addEventListener('click', () => {
+    formCadastro.style.display = 'none';
+    formConsumption.style.display = 'none';
+    formAlerta.style.display = 'block';
+});
+
+// Caso a página seja carregada, exibe o formulário de cadastro como padrão
+document.addEventListener('DOMContentLoaded', () => {
+    formCadastro.style.display = 'block'; // Exibe o cadastro inicialmente
+    formConsumption.style.display = 'none'; // Esconde consulta
+    formAlerta.style.display = 'none'; // Esconde alerta
+});
+

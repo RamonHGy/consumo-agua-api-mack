@@ -53,7 +53,7 @@ export class ConsumoAguaService {
             };
         } else {
             return {
-                message: 'Consumo dentro dos limites normais.'
+                message: 'Consumo dentro do limite.'
             };
         }
     }
