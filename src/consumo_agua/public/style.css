@@ -293,7 +293,7 @@ button:active {
     }
 
     #formCadastro{
-        margin-top: 4%;
+        margin-top: 3%;
     }
     #formRegister input {
         display: flex;
@@ -335,6 +335,7 @@ button:active {
         align-self: center;
         width: 250px;
         border-radius: 10px;
+        text-align: center;
     }
     /*css formulario registro fim */
 
